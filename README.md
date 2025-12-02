@@ -55,6 +55,11 @@ The heroes widget lets you create a list of characters to keep track of, like hi
 
 The statistics widget shows technical data about the mod and the dashboard. It also contains a button to reset the dashboard layout.
 
+## Trading
+![Trading](screenshots/trading-widget.png)
+
+The trading widget shows the best items and where to buy and sell them in your campaign. 
+
 # Links
 
 Download from Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=2876851738
