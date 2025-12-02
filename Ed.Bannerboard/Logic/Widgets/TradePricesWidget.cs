@@ -80,21 +80,23 @@ namespace Ed.Bannerboard.Logic.Widgets
 					return;
 				}
 
-				// Sample items from the first town to get the list of tradeable goods
-				var sampleTown = towns.First().Town;
+				// Sample items from ALL towns to get the complete list of tradeable goods
 				var tradeableItems = new List<ItemObject>();
 
-				// Try to get items from the owner's stash
-				if (sampleTown.Owner?.ItemRoster != null)
+				// Collect tradeable items from all towns
+				foreach (var settlement in towns)
 				{
-					foreach (var rosterElement in sampleTown.Owner.ItemRoster)
+					if (settlement.Town?.Owner?.ItemRoster != null)
 					{
-						var item = rosterElement.EquipmentElement.Item;
-						if (item != null && item.ItemCategory != null && item.ItemCategory.IsTradeGood)
+						foreach (var rosterElement in settlement.Town.Owner.ItemRoster)
 						{
-							if (!tradeableItems.Contains(item))
+							var item = rosterElement.EquipmentElement.Item;
+							if (item != null && item.ItemCategory != null && item.ItemCategory.IsTradeGood)
 							{
-								tradeableItems.Add(item);
+								if (!tradeableItems.Contains(item))
+								{
+									tradeableItems.Add(item);
+								}
 							}
 						}
 					}

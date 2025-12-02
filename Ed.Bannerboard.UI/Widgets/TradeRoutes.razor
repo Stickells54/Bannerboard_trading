@@ -1,0 +1,91 @@
+@inherits WidgetBase
+@using Blazorise
+
+<div class="card">
+	<div class="card-header">
+		<div class="d-flex">
+			<div class="align-self-center">Suggested Trade Routes</div>
+			<div class="ml-auto align-self-center">
+				<small class="text-muted">Based on 10-day price history</small>
+			</div>
+		</div>
+	</div>
+	<div class="card-body">
+		@if (_routesModel != null && _routesModel.Routes.Any())
+		{
+			<div class="table-responsive">
+				<table class="table table-sm table-hover">
+					<thead>
+						<tr>
+							<th>Good</th>
+							<th>Buy From</th>
+							<th class="text-right">Avg Buy</th>
+							<th>Sell To</th>
+							<th class="text-right">Avg Sell</th>
+							<th class="text-right">Profit</th>
+							<th>Stability</th>
+							<th>Risk</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var route in _routesModel.Routes)
+						{
+							<tr>
+								<td><strong>@route.GoodName</strong></td>
+								<td><small>@route.BuyTown</small></td>
+								<td class="text-right">
+									<span class="badge badge-info">@route.AvgBuyPrice</span>
+								</td>
+								<td><small>@route.SellTown</small></td>
+								<td class="text-right">
+									<span class="badge badge-success">@route.AvgSellPrice</span>
+								</td>
+								<td class="text-right">
+									<span class="text-success font-weight-bold">+@route.AvgProfit</span>
+								</td>
+								<td>
+									<div class="progress" style="height: 20px; width: 80px;">
+										<div class="progress-bar" 
+											 role="progressbar" 
+											 style="width: @(route.StabilityScore)%; background-color: @GetStabilityBarColor(route.StabilityScore);"
+											 aria-valuenow="@route.StabilityScore" 
+											 aria-valuemin="0" 
+											 aria-valuemax="100">
+											@route.StabilityScore
+										</div>
+									</div>
+								</td>
+								<td>
+									<span class="@GetRiskBadgeClass(route.RiskLevel)">@route.RiskLevel</span>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+			<div class="mt-2">
+				<small class="text-muted">
+					<i class="fa fa-info-circle"></i>
+					<strong>Stability:</strong> Higher scores indicate more consistent prices (lower risk).
+					Routes are sorted by stability first, then profit.
+				</small>
+			</div>
+		}
+		else
+		{
+			<div class="d-flex justify-content-center">
+				<p class="text-muted">
+					<i class="fa fa-info-circle"></i>
+					@if (_routesModel == null)
+					{
+						<span>No data or incompatible mod version</span>
+					}
+					else
+					{
+						<span>Not enough price history yet. Wait a few in-game days for data to accumulate.</span>
+					}
+				</p>
+			</div>
+		}
+	</div>
+</div>
