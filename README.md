@@ -62,6 +62,8 @@ The trading widget shows the best items and where to buy and sell them in your c
 
 # Links
 
+FOR ORIGNAL MOD, I HAVENT PUBLISHED THIS FORK ANYWHERE
+
 Download from Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=2876851738
 
 Download from Nexus: https://www.nexusmods.com/mountandblade2bannerlord/mods/3386
