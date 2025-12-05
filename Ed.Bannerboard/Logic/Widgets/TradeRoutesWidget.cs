@@ -32,12 +32,20 @@ namespace Ed.Bannerboard.Logic.Widgets
 		{
 		}
 
+		protected override bool IsWidgetEnabled()
+		{
+			if (!base.IsWidgetEnabled()) return false;
+			return Ed.Bannerboard.Settings.BannerboardSettings.Instance?.EnableTradeRoutes ?? true;
+		}
+
 		public override void RegisterEvents()
 		{
 			CampaignEvents.DailyTickEvent.AddNonSerializedListener(this, new Action(() =>
 			{
 				RecordPrices();
 				_currentDay++;
+
+				if (!IsWidgetEnabled()) return;
 
 				// Send updates every day
 				foreach (var session in Server.GetAllSessions())
@@ -51,6 +59,8 @@ namespace Ed.Bannerboard.Logic.Widgets
 		{
 			// Initialize with current prices
 			RecordPrices();
+			
+			if (!IsWidgetEnabled()) return;
 			SendUpdate(session);
 		}
 
@@ -150,7 +160,10 @@ namespace Ed.Bannerboard.Logic.Widgets
 					var townsWithHistory = townPrices.Where(t => t.Value.Count >= 3).ToList();
 					if (townsWithHistory.Count < 2) continue;
 
-					// Find best buy and sell towns based on average and stability
+					// Find BEST SINGLE route for this item (not all combinations)
+					TradeRouteItem bestRoute = null;
+					int bestScore = 0;
+
 					foreach (var buyTown in townsWithHistory)
 					{
 						foreach (var sellTown in townsWithHistory)
@@ -184,26 +197,40 @@ namespace Ed.Bannerboard.Logic.Widgets
 							else
 								riskLevel = "High";
 
-							routes.Add(new TradeRouteItem
+							// Skip high risk routes
+							if (riskLevel == "High") continue;
+
+							// Combined score: stability matters more than raw profit
+							var combinedScore = (stabilityScore * 2) + (avgProfit / 10);
+
+							if (bestRoute == null || combinedScore > bestScore)
 							{
-								GoodName = itemName,
-								BuyTown = buyTown.Key,
-								AvgBuyPrice = avgBuyPrice,
-								SellTown = sellTown.Key,
-								AvgSellPrice = avgSellPrice,
-								AvgProfit = avgProfit,
-								StabilityScore = stabilityScore,
-								RiskLevel = riskLevel
-							});
+								bestScore = combinedScore;
+								bestRoute = new TradeRouteItem
+								{
+									GoodName = itemName,
+									BuyTown = buyTown.Key,
+									AvgBuyPrice = avgBuyPrice,
+									SellTown = sellTown.Key,
+									AvgSellPrice = avgSellPrice,
+									AvgProfit = avgProfit,
+									StabilityScore = stabilityScore,
+									RiskLevel = riskLevel
+								};
+							}
 						}
+					}
+
+					// Add the best route for this item (if one exists)
+					if (bestRoute != null)
+					{
+						routes.Add(bestRoute);
 					}
 				}
 
-				// Sort by stability score first, then by profit
+				// Sort by combined score (stability weighted more than profit)
 				var sortedRoutes = routes
-					.Where(r => r.RiskLevel == "Low" || r.RiskLevel == "Medium") // Filter out high risk
-					.OrderByDescending(r => r.StabilityScore)
-					.ThenByDescending(r => r.AvgProfit)
+					.OrderByDescending(r => (r.StabilityScore * 2) + (r.AvgProfit / 10))
 					.Take(20) // Top 20 routes
 					.ToList();
 

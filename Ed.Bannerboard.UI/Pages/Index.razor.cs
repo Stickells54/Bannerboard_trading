@@ -30,6 +30,7 @@ namespace Ed.Bannerboard.UI.Pages
             new WidgetComponent(typeof(TownProsperity), 10, 0, 6, 6),
             new WidgetComponent(typeof(TradePrices), 16, 6, 8, 12),
             new WidgetComponent(typeof(TradeRoutes), 24, 6, 8, 12),
+            new WidgetComponent(typeof(CityMarket), 16, 18, 8, 12),
             new WidgetComponent(typeof(Stats), 16, 0, 3, 6)
         };
 

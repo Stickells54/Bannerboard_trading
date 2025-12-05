@@ -42,6 +42,7 @@ namespace Ed.Bannerboard
                     new HeroTracker(_server, _version),
                     new TradePricesWidget(_server, _version),
                     new TradeRoutesWidget(_server, _version),
+                    new CityMarketWidget(_server, _version),
                 };
 
                 // Register widget behaviors in the game

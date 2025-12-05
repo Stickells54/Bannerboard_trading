@@ -10,6 +10,7 @@
   </PropertyGroup>
 	
   <ItemGroup>
+    <PackageReference Include="Bannerlord.MCM" Version="5.10.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="SuperSocket.Engine" Version="1.6.6.1" />
     <PackageReference Include="SuperSocket.WebSocket" Version="1.6.6.1" />

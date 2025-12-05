@@ -1,6 +1,7 @@
 ﻿using SuperSocket.WebSocket;
 using System;
 using TaleWorlds.CampaignSystem;
+using Ed.Bannerboard.Settings;
 
 namespace Ed.Bannerboard.Logic.Widgets
 {
@@ -29,6 +30,49 @@ namespace Ed.Bannerboard.Logic.Widgets
         /// Widget version.
         /// </summary>
         protected Version Version { get; set; }
+
+        /// <summary>
+        /// Check if widget updates are enabled globally and for this specific widget.
+        /// </summary>
+        protected virtual bool IsWidgetEnabled()
+        {
+            // Check if global widget updates are disabled
+            if (BannerboardSettings.Instance != null && !BannerboardSettings.Instance.EnableWidgetUpdates)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Send data to all connected sessions if widget is enabled.
+        /// </summary>
+        protected void SendData(string data)
+        {
+            if (!IsWidgetEnabled())
+            {
+                return;
+            }
+
+            var sessions = Server.GetAllSessions();
+            foreach (var session in sessions)
+            {
+                session.Send(data);
+            }
+        }
+
+        /// <summary>
+        /// Send data to a specific session if widget is enabled.
+        /// </summary>
+        protected void SendData(WebSocketSession session, string data)
+        {
+            if (!IsWidgetEnabled())
+            {
+                return;
+            }
+
+            session.Send(data);
+        }
 
         /// <summary>
         /// Initializes a widget.

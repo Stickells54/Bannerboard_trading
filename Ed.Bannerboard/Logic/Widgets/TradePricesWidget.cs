@@ -27,10 +27,18 @@ namespace Ed.Bannerboard.Logic.Widgets
 		{
 		}
 
+		protected override bool IsWidgetEnabled()
+		{
+			if (!base.IsWidgetEnabled()) return false;
+			return Ed.Bannerboard.Settings.BannerboardSettings.Instance?.EnableTradePrices ?? true;
+		}
+
 		public override void RegisterEvents()
 		{
 			CampaignEvents.HourlyTickEvent.AddNonSerializedListener(this, new Action(() =>
 			{
+				if (!IsWidgetEnabled()) return;
+				
 				foreach (var session in Server.GetAllSessions())
 				{
 					SendUpdate(session);
@@ -40,6 +48,7 @@ namespace Ed.Bannerboard.Logic.Widgets
 
 		public override void Init(WebSocketSession session)
 		{
+			if (!IsWidgetEnabled()) return;
 			SendUpdate(session);
 		}
 
@@ -50,6 +59,8 @@ namespace Ed.Bannerboard.Logic.Widgets
 
 		public override void HandleMessage(WebSocketSession session, string message)
 		{
+			if (!IsWidgetEnabled()) return;
+			
 			var model = Newtonsoft.Json.JsonConvert.DeserializeObject<TradePricesFilterModel>(message, new Newtonsoft.Json.Converters.VersionConverter());
 			if (model == null)
 			{

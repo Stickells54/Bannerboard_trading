@@ -1,0 +1,78 @@
+@inherits WidgetBase
+@using Blazorise
+
+<div class="card">
+	<div class="card-header">
+		<div class="d-flex">
+			<div class="align-self-center">City Market Prices</div>
+			<div class="ml-auto align-self-center">
+				@if (_cityMarketModel != null && _cityMarketModel.AvailableCities.Any())
+				{
+					<select class="form-control form-control-sm" style="width: auto;" @onchange="OnCitySelected">
+						@foreach (var city in _cityMarketModel.AvailableCities)
+						{
+							<option value="@city" selected="@(city == _cityMarketModel.SelectedCity)">@city</option>
+						}
+					</select>
+				}
+			</div>
+		</div>
+	</div>
+	<div class="card-body">
+		@if (_cityMarketModel != null && _cityMarketModel.Items.Any())
+		{
+			<div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+				<table class="table table-sm table-hover table-striped">
+					<thead class="sticky-top bg-dark">
+						<tr>
+							<th>Item</th>
+							<th class="text-right">Price</th>
+							<th>Category</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in _cityMarketModel.Items)
+						{
+							<tr class="@(item.Price == 0 ? "text-muted" : "")">
+								<td>@item.Name</td>
+								<td class="text-right">
+									@if (item.Price > 0)
+									{
+										<span class="badge badge-info">@item.Price</span>
+									}
+									else
+									{
+										<span class="text-muted">N/A</span>
+									}
+								</td>
+								<td><small>@item.Category</small></td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+			<div class="mt-2">
+				<small class="text-muted">
+					<i class="fa fa-info-circle"></i>
+					Showing @_cityMarketModel.Items.Count items in @_cityMarketModel.SelectedCity
+				</small>
+			</div>
+		}
+		else
+		{
+			<div class="d-flex justify-content-center">
+				<p class="text-muted">
+					<i class="fa fa-info-circle"></i>
+					@if (_cityMarketModel == null)
+					{
+						<span>No data or incompatible mod version</span>
+					}
+					else
+					{
+						<span>No market data available</span>
+					}
+				</p>
+			</div>
+		}
+	</div>
+</div>
