@@ -1,82 +1,78 @@
-# Description
+# BannerboardLocal
 
-This is a mod for Mount &amp; Blade II: Bannerlord that lets you view game data in real time on a dashboard in a browser.
+**BannerboardLocal** is a comprehensive dashboard mod for *Mount & Blade II: Bannerlord* that displays real-time game data in a web browser. It runs a local web server alongside the game, allowing you to view detailed analytics, track world events, and optimize your trading strategy on a second monitor, tablet, or phone.
 
-When the mod is loaded it sets up a local WebSocket server and pushes updates to connected clients.
-The client is a Blazor WebAssembly app that runs in a browser and connects to the local WebSocket server and listens for updates.
+The dashboard is a modern Single Page Application (SPA) built with **React** and **Bootstrap 5**, communicating with the game via WebSockets for instant updates.
 
-No data is sent outside your system, the browser downloads the client code and runs it locally.
+This mod is forked from and completely ripping off of the original Bannerboard mod: https://github.com/edgarssults/Bannerboard
+I added my own things I wanted and made it run locally without the need for accessing an Azure site. 
 
-# Widgets
+## Features
 
-![Dashboard](screenshots/dashboard.png)
+-   **Real-Time Dashboard**: Updates instantly as you play.
+-   **Modern UI**: Clean, responsive interface that works on any device with a browser.
+-   **Zero External Traffic**: All data is processed locally on your machine. No data is sent to the internet.
+-   **Comprehensive Data**: Covers everything from your party's finances to global kingdom politics.
 
-Widgets generally update every in-game hour. More widgets are being added.
+## Dashboard Tabs & Widgets
 
-## Strength
+The dashboard is organized into five main tabs to help you manage different aspects of your campaign:
 
-![Strength](screenshots/widget-strength.png)
+### 1. Party & Clan
+Manage your immediate entourage and family affairs.
+-   **Party Stats**: Real-time metrics on your party's morale, speed, food, and wage costs.
+-   **Clan Info**: A detailed overview of your clan's status:
+    -   **Overview**: Renown, Influence, Tier, and Gold.
+    -   **Finances**: Daily income vs. expenses breakdown.
+    -   **Workshops**: Status, location, and profitability of your workshops.
+    -   **Fiefs**: Management stats for your towns and castles (Prosperity, Loyalty, Garrison, etc.).
 
-The strength widget displays kingdom strength as reported by the game API. The numbers are the same as displayed in the diplomacy tab in-game. This data can help you decide whether it's a good idea to attack someone. The kingdoms shown can be filtered.
+### 2. Kingdoms
+Keep an eye on the geopolitical landscape.
+-   **Kingdom Strength**: Comparative charts showing the military strength (Troops), political power (Clans), and territory (Fiefs) of all kingdoms.
+-   **Kingdom Lords**: A searchable list of all lords in each kingdom, including their clan affiliations.
+-   **Kingdom Wars**: Current diplomatic status, showing active wars and peace treaties.
 
-## Lords
+### 3. Trading
+Maximize your profits with advanced market intelligence.
+-   **Market Table**: A searchable database of item prices and stock levels for any town you've visited (or have trade rumors for).
+-   **Trade Prices**: A global overview of trade goods, highlighting the absolute lowest buy prices and highest sell prices currently available in the world.
+-   **Trade Routes**: Automatically calculated profitable trade routes. The mod analyzes market data to suggest where to buy low and sell high for maximum profit.
 
-![Lords](screenshots/widget-lords.png)
+### 4. Settlements
+Monitor the prosperity and development of the world.
+-   **Town Prosperity**: A global ranking of towns by prosperity. Use this to identify rich targets for conquest or struggling fiefs that need investment.
 
-The lords widget displays the number of lords in each kingdom. This data is related to kingdom strength, but it can also help you find lords that might be tempted to switch allegiance. The kingdoms shown can be filtered.
+### 5. Heroes
+Track important characters across Calradia.
+-   **Hero Tracker**: A tool to search for and track the last known location and status (Active, Dead, Disabled) of any hero in the game. Perfect for hunting down enemy lords or finding potential spouses.
 
-## Wars
+## Dependencies
 
-![Wars](screenshots/widget-wars.png)
+To ensure the mod functions correctly and to access the in-game settings menu, you must install the following dependencies (available on Steam Workshop and Nexus Mods):
 
-The wars widget shows which kingdoms are at war with each other. This can help you decide which kingdom to attack. The kingdoms shown can be filtered and it is also possible to show minor factions.
+1.  **Harmony**
+2.  **ButterLib**
+3.  **UIExtenderEx**
+4.  **Mod Configuration Menu (MCM)**
 
-## Prosperity
+*Note: When installing MCM on Steam, it should prompt you to subscribe to the other required dependencies automatically.*
 
-![Prosperity](screenshots/widget-prosperity.png)
+## Usage
 
-The prosperity widget shows the top most prosperous cities. The chart view shows prosperity as reported by the game API and the table view also shows the number of militia and garrisoned troops. This data can help you decide which cities would be most profitable to conquer next. The number of top cities shown can be changed.
+1.  Ensure all dependencies listed above are installed and enabled.
+2.  Enable **Bannerboard** in the Bannerlord launcher.
+3.  Launch the game.
+4.  Once in the campaign map, open your web browser and navigate to: `http://localhost:8080` (default port).
 
-## Party
+## Credits
 
-![Party](screenshots/widget-party.png)
+-   **UI Framework**: React, Bootstrap 5
+-   **Server**: EmbedIO, SuperSocket
+-   **Icons**: [Freepik](https://www.flaticon.com/authors/freepik) from [Flaticon](https://www.flaticon.com), [Game-icons.net](https://game-icons.net)
 
-The party widget shows information about the player's party like the number and composition of troops and the amount of food available. The sections shown can be filtered.
+## Links
 
-## Heroes
-
-![Heroes](screenshots/widget-heroes.png)
-
-The heroes widget lets you create a list of characters to keep track of, like highly skilled companions or enemy kings. The last known location will update whenever you visit a settlement, same as in-game. It is possible to turn on tracking for each character individually, which will track their last known location on the in-game campaign map.
-
-## Stats
-
-![Stats](screenshots/widget-stats.png)
-
-The statistics widget shows technical data about the mod and the dashboard. It also contains a button to reset the dashboard layout.
-
-## Trading
-![Trading](screenshots/trading-widget.png)
-
-The trading widget shows the best items and where to buy and sell them in your campaign. 
-
-# Links
-
-FOR ORIGNAL MOD, I HAVENT PUBLISHED THIS FORK ANYWHERE
-
-Download from Steam Workshop: https://steamcommunity.com/sharedfiles/filedetails/?id=2876851738
-
-Download from Nexus: https://www.nexusmods.com/mountandblade2bannerlord/mods/3386
-
-Connect to your game: https://bannerboard.azurewebsites.net
-
-# Developer links
-
-Instructions for publishing the mod on Steam Workshop: https://moddocs.bannerlord.com/steam-workshop/uploading_updating_mod
-
-# Credits
-
-Icons made by:
-
-- [Freepik](https://www.flaticon.com/authors/freepik) from [Flaticon](https://www.flaticon.com).
-- [Game-icons.net](https://game-icons.net)
+-   **Original mod:**
+-   **Nexus Mods**: [Bannerboard on Nexus](https://www.nexusmods.com/mountandblade2bannerlord/mods/3386)
+-   **Steam Workshop**: [Bannerboard on Steam](https://steamcommunity.com/sharedfiles/filedetails/?id=2876851738)
