@@ -184,6 +184,7 @@ public class CustomBehavior : CampaignBehaviorBase
 - Check `ApplicationVersion` in code for compatibility
 - Tag releases with supported game version (e.g., "e1.2.9")
 - **Breaking changes occur frequently** - test after game updates
+- Always update all relevant files for versioning changes
 
 ### Load Order
 - Dependencies listed in `<DependedModules>` control load order

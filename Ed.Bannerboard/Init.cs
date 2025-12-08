@@ -1,10 +1,14 @@
 ﻿using Ed.Bannerboard.Logic;
 using Ed.Bannerboard.Logic.Widgets;
 using Ed.Bannerboard.Models;
+using EmbedIO;
+using EmbedIO.Files;
+using EmbedIO.WebApi;
 using SuperSocket.SocketBase;
 using SuperSocket.WebSocket;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
@@ -15,9 +19,10 @@ namespace Ed.Bannerboard
     public class Init : MBSubModuleBase
     {
         // This version should be in sync with the version in SubModule.xml
-        private readonly Version _version = new Version("0.5.1");
+        private readonly Version _version = new Version("0.5.2");
 
         private WebSocketServer _server;
+        private WebServer _httpServer;
         private List<WidgetBase> _widgets;
 
         /// <summary>
@@ -30,6 +35,7 @@ namespace Ed.Bannerboard
             if (game.GameType is Campaign)
             {
                 StartServer();
+                StartHttpServer();
 
                 // Define dashboard widgets
                 _widgets = new List<WidgetBase>
@@ -38,6 +44,7 @@ namespace Ed.Bannerboard
                     new KingdomLordsWidget(_server, _version),
                     new KingdomWarsWidget(_server, _version),
                     new PartyStatsWidget(_server, _version),
+                    new ClanInfoWidget(_server, _version),
                     new TownProsperity(_server, _version),
                     new HeroTracker(_server, _version),
                     new TradePricesWidget(_server, _version),
@@ -60,9 +67,56 @@ namespace Ed.Bannerboard
             if (game.GameType is Campaign && _server != null)
             {
                 StopServer();
+                StopHttpServer();
 
                 // Clear all loaded widgets
                 _widgets = null;
+            }
+        }
+
+        /// <summary>
+        /// Starts the HTTP server for serving the UI.
+        /// </summary>
+        private void StartHttpServer()
+        {
+            try
+            {
+                // Get the module base path
+                var modulesPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "Modules", "Bannerboard", "ModuleData", "Web");
+                var webPath = Path.GetFullPath(modulesPath);
+                
+                if (!Directory.Exists(webPath))
+                {
+                    InformationManager.DisplayMessage(new InformationMessage($"Bannerboard UI folder not found at: {webPath}", Colors.Yellow));
+                    return;
+                }
+
+                _httpServer = new WebServer(o => o
+                    .WithUrlPrefix("http://localhost:8080/")
+                    .WithMode(HttpListenerMode.EmbedIO))
+                    .WithWebApi("/api", m => m.RegisterController<Controllers.MarketController>())
+                    .WithStaticFolder("/", webPath, true);
+
+                _httpServer.RunAsync();
+                
+                InformationManager.DisplayMessage(new InformationMessage("Bannerboard HTTP server started on http://localhost:8080"));
+            }
+            catch (Exception ex)
+            {
+                InformationManager.DisplayMessage(new InformationMessage($"Bannerboard HTTP server failed: {ex.Message}", Colors.Red));
+            }
+        }
+
+        /// <summary>
+        /// Stops the HTTP server.
+        /// </summary>
+        private void StopHttpServer()
+        {
+            if (_httpServer != null)
+            {
+                _httpServer.Dispose();
+                _httpServer = null;
+                InformationManager.DisplayMessage(new InformationMessage("Bannerboard HTTP server stopped"));
             }
         }
 

@@ -100,45 +100,10 @@ namespace Ed.Bannerboard.Logic.Widgets
 
 				// Find the selected settlement
 				var selectedSettlement = towns.FirstOrDefault(t => t.Name.ToString() == _selectedCity);
-				var marketItems = new List<MarketItem>();
-
-				if (selectedSettlement != null)
-				{
-					// Collect all tradeable items from all towns to get complete item list
-					var allTradeableItems = new List<ItemObject>();
-
-					foreach (var settlement in towns)
-					{
-						if (settlement.Town?.Owner?.ItemRoster != null)
-						{
-							foreach (var rosterElement in settlement.Town.Owner.ItemRoster)
-							{
-								var item = rosterElement.EquipmentElement.Item;
-								if (item != null && item.ItemCategory != null && item.ItemCategory.IsTradeGood)
-								{
-									if (!allTradeableItems.Contains(item))
-									{
-										allTradeableItems.Add(item);
-									}
-								}
-							}
-						}
-					}
-
-					// Get prices for all items in the selected city
-					foreach (var item in allTradeableItems.OrderBy(i => i.Name.ToString()))
-					{
-						var price = selectedSettlement.Town.MarketData.GetPrice(item, null, false);
-						
-						// Include items even if price is 0 (city might not have it in stock)
-						marketItems.Add(new MarketItem
-						{
-							Name = item.Name.ToString(),
-							Price = price,
-							Category = item.ItemCategory?.ToString() ?? "Unknown"
-						});
-					}
-				}
+				
+                // We no longer broadcast the full item list via WebSocket
+                // The frontend will fetch data from /api/market/{city}
+				var marketItems = new List<MarketItem>(); 
 
 				var model = new CityMarketModel
 				{

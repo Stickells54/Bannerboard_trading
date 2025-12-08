@@ -57,7 +57,18 @@ namespace Ed.Bannerboard.Logic.Widgets
             var sessions = Server.GetAllSessions();
             foreach (var session in sessions)
             {
-                session.Send(data);
+                // Fire and forget - don't block main thread
+                System.Threading.Tasks.Task.Run(() => 
+                {
+                    try 
+                    {
+                        session.Send(data);
+                    }
+                    catch 
+                    {
+                        // Ignore send failures (UDP-like behavior requested)
+                    }
+                });
             }
         }
 
@@ -71,7 +82,18 @@ namespace Ed.Bannerboard.Logic.Widgets
                 return;
             }
 
-            session.Send(data);
+            // Fire and forget - don't block main thread
+            System.Threading.Tasks.Task.Run(() => 
+            {
+                try
+                {
+                    session.Send(data);
+                }
+                catch
+                {
+                    // Ignore send failures (UDP-like behavior requested)
+                }
+            });
         }
 
         /// <summary>
