@@ -46,7 +46,6 @@ namespace Ed.Bannerboard
                     new PartyStatsWidget(_server, _version),
                     new ClanInfoWidget(_server, _version),
                     new TownProsperity(_server, _version),
-                    new HeroTracker(_server, _version),
                     new TradePricesWidget(_server, _version),
                     new TradeRoutesWidget(_server, _version),
                     new CityMarketWidget(_server, _version),

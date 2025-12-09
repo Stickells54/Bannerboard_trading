@@ -262,27 +262,27 @@ export function ClanInfo({ data }: ClanInfoProps) {
         {activeTab === 'overview' && (
           <div className="row g-3">
             <div className="col-md-6">
-              <div className="card bg-light">
+              <div className="card h-100">
                 <div className="card-body">
-                  <h6 className="card-subtitle mb-2 text-muted">Clan Stats</h6>
-                  <div className="row">
+                  <h6 className="card-subtitle mb-3 text-muted">Clan Stats</h6>
+                  <div className="row g-3">
                     <div className="col-6">
-                      <div className="mb-2">
-                        <small className="text-muted">Tier</small>
+                      <div className="mb-3">
+                        <small className="text-muted d-block mb-1">Tier</small>
                         <div className="h4 mb-0">{data.Tier}</div>
                       </div>
-                      <div className="mb-2">
-                        <small className="text-muted">Renown</small>
+                      <div>
+                        <small className="text-muted d-block mb-1">Renown</small>
                         <div className="h4 mb-0">{data.Renown.toLocaleString()}</div>
                       </div>
                     </div>
                     <div className="col-6">
-                      <div className="mb-2">
-                        <small className="text-muted">Influence</small>
+                      <div className="mb-3">
+                        <small className="text-muted d-block mb-1">Influence</small>
                         <div className="h4 mb-0">{data.Influence.toLocaleString()}</div>
                       </div>
-                      <div className="mb-2">
-                        <small className="text-muted">Gold</small>
+                      <div>
+                        <small className="text-muted d-block mb-1">Gold</small>
                         <div className="h4 mb-0 text-warning">{data.Gold.toLocaleString()}</div>
                       </div>
                     </div>
@@ -291,20 +291,20 @@ export function ClanInfo({ data }: ClanInfoProps) {
               </div>
             </div>
             <div className="col-md-6">
-              <div className="card bg-light">
+              <div className="card h-100">
                 <div className="card-body">
-                  <h6 className="card-subtitle mb-2 text-muted">Finances</h6>
-                  <div className="mb-2">
-                    <small className="text-muted">Total Income</small>
+                  <h6 className="card-subtitle mb-3 text-muted">Finances</h6>
+                  <div className="mb-3">
+                    <small className="text-muted d-block mb-1">Total Income</small>
                     <div className="h5 mb-0 text-success">+{data.TotalIncome.toLocaleString()} gold/day</div>
                   </div>
-                  <div className="mb-2">
-                    <small className="text-muted">Total Expenses</small>
+                  <div className="mb-3">
+                    <small className="text-muted d-block mb-1">Total Expenses</small>
                     <div className="h5 mb-0 text-danger">-{data.TotalExpenses.toLocaleString()} gold/day</div>
                   </div>
-                  <hr />
-                  <div className="mb-0">
-                    <small className="text-muted">Net Income</small>
+                  <hr className="my-3" />
+                  <div>
+                    <small className="text-muted d-block mb-1">Net Income</small>
                     <div className={`h4 mb-0 ${data.NetIncome >= 0 ? 'text-success' : 'text-danger'}`}>
                       {data.NetIncome >= 0 ? '+' : ''}{data.NetIncome.toLocaleString()} gold/day
                     </div>
@@ -313,25 +313,25 @@ export function ClanInfo({ data }: ClanInfoProps) {
               </div>
             </div>
             <div className="col-12">
-              <div className="card bg-light">
+              <div className="card">
                 <div className="card-body">
-                  <h6 className="card-subtitle mb-2 text-muted">Holdings Summary</h6>
+                  <h6 className="card-subtitle mb-3 text-muted">Holdings Summary</h6>
                   <div className="row">
                     <div className="col-md-4">
-                      <div className="text-center">
-                        <div className="h2 mb-0">{data.Workshops.length}</div>
+                      <div className="text-center p-3">
+                        <div className="h2 mb-1">{data.Workshops.length}</div>
                         <small className="text-muted">Workshops</small>
                       </div>
                     </div>
                     <div className="col-md-4">
-                      <div className="text-center">
-                        <div className="h2 mb-0">{data.Fiefs.filter(f => f.Type === 'Town').length}</div>
+                      <div className="text-center p-3 border-start border-end">
+                        <div className="h2 mb-1">{data.Fiefs.filter(f => f.Type === 'Town').length}</div>
                         <small className="text-muted">Towns</small>
                       </div>
                     </div>
                     <div className="col-md-4">
-                      <div className="text-center">
-                        <div className="h2 mb-0">{data.Fiefs.filter(f => f.Type === 'Castle').length}</div>
+                      <div className="text-center p-3">
+                        <div className="h2 mb-1">{data.Fiefs.filter(f => f.Type === 'Castle').length}</div>
                         <small className="text-muted">Castles</small>
                       </div>
                     </div>

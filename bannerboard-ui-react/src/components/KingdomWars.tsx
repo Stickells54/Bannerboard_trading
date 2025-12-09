@@ -5,44 +5,83 @@ interface KingdomWarsProps {
 }
 
 export function KingdomWars({ kingdoms }: KingdomWarsProps) {
+  if (!kingdoms || kingdoms.length === 0) {
+    return (
+      <div className="card h-100">
+        <div className="card-header">
+          <h5 className="mb-0">Kingdom Wars</h5>
+        </div>
+        <div className="card-body text-center text-muted">
+          <p className="mb-0">No kingdom data available</p>
+        </div>
+      </div>
+    );
+  }
+
+  const kingdomsAtWar = kingdoms.filter(k => k.Wars && k.Wars.length > 0);
+  const kingdomsAtPeace = kingdoms.filter(k => !k.Wars || k.Wars.length === 0);
+
   return (
-    <div className="card">
+    <div className="card h-100">
       <div className="card-header">
         <h5 className="mb-0">Kingdom Wars</h5>
       </div>
-      <div className="card-body" style={{ maxHeight: '500px', overflowY: 'auto' }}>
-        {kingdoms.map((kingdom) => (
-          <div key={kingdom.Name} className="mb-3">
-            <h6>
-              <span
-                className="badge me-2"
-                style={{ backgroundColor: kingdom.PrimaryColor }}
-              >
-                ●
-              </span>
-              {kingdom.Name}
-            </h6>
-            {kingdom.Wars.length === 0 ? (
-              <p className="text-muted small mb-0">At peace</p>
-            ) : (
-              <ul className="list-unstyled mb-0">
-                {kingdom.Wars.map((war, idx) => (
-                  <li key={idx} className="small">
-                    <span className="badge bg-danger me-1">⚔</span>
-                    {war.Name}
-                    {war.IsMinorFaction && (
-                      <span className="badge bg-secondary ms-1">Minor Faction</span>
-                    )}
-                    {war.IsKingdomFaction && (
-                      <span className="badge bg-primary ms-1">Kingdom</span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        ))}
+      <div className="card-body p-0">
+        <div className="table-responsive" style={{ maxHeight: '500px' }}>
+          <table className="table table-hover mb-0 align-middle">
+            <thead>
+              <tr>
+                <th>Kingdom</th>
+                <th>Active Wars</th>
+              </tr>
+            </thead>
+            <tbody>
+              {kingdomsAtWar.map((kingdom) => (
+                <tr key={kingdom.Name}>
+                  <td style={{ width: '30%' }}>
+                    <div className="d-flex align-items-center">
+                      <span
+                        className="me-2"
+                        style={{ 
+                          backgroundColor: kingdom.PrimaryColor, 
+                          width: '12px', 
+                          height: '12px', 
+                          display: 'inline-block',
+                          borderRadius: '50%'
+                        }}
+                      >
+                      </span>
+                      <span className="fw-bold">{kingdom.Name}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="d-flex flex-wrap gap-2">
+                      {kingdom.Wars.map((war, idx) => (
+                        <span key={idx} className="badge bg-danger d-flex align-items-center">
+                          <span className="me-1">⚔</span>
+                          {war.Name}
+                        </span>
+                      ))}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {kingdomsAtWar.length === 0 && (
+                <tr>
+                  <td colSpan={2} className="text-center text-muted py-4">
+                    All kingdoms are at peace
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
+      {kingdomsAtPeace.length > 0 && (
+        <div className="card-footer small">
+          <strong>At peace:</strong> {kingdomsAtPeace.map(k => k.Name).join(', ')}
+        </div>
+      )}
     </div>
   );
 }

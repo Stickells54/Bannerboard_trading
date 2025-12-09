@@ -49,10 +49,6 @@ Monitor the prosperity and development of the world.
 -   **Town Prosperity**: A global ranking of towns by prosperity. Use this to identify rich targets for conquest or struggling fiefs that need investment.
 ![Settlements](screenshots/New-Setllements.png)
 
-### 5. Heroes
-Track important characters across Calradia.
--   **Hero Tracker**: A tool to search for and track the last known location and status (Active, Dead, Disabled) of any hero in the game. Perfect for hunting down enemy lords or finding potential spouses.
-
 ## Dependencies
 
 To ensure the mod functions correctly and to access the in-game settings menu, you must install the following dependencies (available on Steam Workshop and Nexus Mods):

@@ -9,7 +9,6 @@ import { ClanInfo } from './components/ClanInfo';
 import { TownProsperity } from './components/TownProsperity';
 import { TradePrices } from './components/TradePrices';
 import { TradeRoutes } from './components/TradeRoutes';
-import { HeroTracker } from './components/HeroTracker';
 import type {
   CityMarketModel,
   KingdomStrengthModel,
@@ -20,7 +19,6 @@ import type {
   TownProsperityModel,
   TradePricesModel,
   TradeRoutesModel,
-  HeroTrackerModel,
 } from './types/models';
 import './App.css';
 
@@ -36,7 +34,11 @@ function App() {
   const [townProsperity, setTownProsperity] = useState<TownProsperityModel | null>(null);
   const [tradePrices, setTradePrices] = useState<TradePricesModel | null>(null);
   const [tradeRoutes, setTradeRoutes] = useState<TradeRoutesModel | null>(null);
-  const [heroTracker, setHeroTracker] = useState<HeroTrackerModel | null>(null);
+  const [theme, setTheme] = useState<string>('dark');
+
+  useEffect(() => {
+    document.body.className = theme;
+  }, [theme]);
 
   useEffect(() => {
     if (lastMessage) {
@@ -68,9 +70,6 @@ function App() {
         case 'TradeRoutesModel':
           setTradeRoutes(lastMessage as TradeRoutesModel);
           break;
-        case 'HeroTrackerModel':
-          setHeroTracker(lastMessage as HeroTrackerModel);
-          break;
       }
     }
   }, [lastMessage]);
@@ -80,7 +79,18 @@ function App() {
       <header className="mb-4">
         <div className="d-flex justify-content-between align-items-center">
           <h1 className="display-4 mb-0">Bannerboard Dashboard</h1>
-          <div className="d-flex align-items-center gap-2">
+          <div className="d-flex align-items-center gap-3">
+            <select 
+              className="form-select form-select-sm" 
+              style={{ width: 'auto' }}
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
+            >
+              <option value="dark">Dark Mode</option>
+              <option value="light">Light Mode</option>
+              <option value="cyberpunk">Cyberpunk</option>
+              <option value="nostalgic">Nostalgic</option>
+            </select>
             <div className={`badge ${isConnected ? 'bg-success' : 'bg-danger'}`}>
               {isConnected ? '● Connected' : '● Disconnected'}
             </div>
@@ -125,15 +135,6 @@ function App() {
             type="button"
           >
             Settlements
-          </button>
-        </li>
-        <li className="nav-item" role="presentation">
-          <button
-            className={`nav-link ${activeTab === 'heroes' ? 'active' : ''}`}
-            onClick={() => setActiveTab('heroes')}
-            type="button"
-          >
-            Heroes
           </button>
         </li>
       </ul>
@@ -254,29 +255,6 @@ function App() {
                     <p className="mb-0">
                       {isConnected
                         ? 'Waiting for settlement data from Bannerlord...'
-                        : 'Connecting to Bannerlord... Make sure the game is running with Bannerboard mod enabled.'}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Heroes Tab */}
-        <div className={`tab-pane fade ${activeTab === 'heroes' ? 'show active' : ''}`}>
-          <div className="row g-3">
-            {heroTracker ? (
-              <div className="col-12">
-                <HeroTracker data={heroTracker.Heroes} />
-              </div>
-            ) : (
-              <div className="col-12">
-                <div className="card">
-                  <div className="card-body text-center text-muted">
-                    <p className="mb-0">
-                      {isConnected
-                        ? 'Waiting for hero data from Bannerlord...'
                         : 'Connecting to Bannerlord... Make sure the game is running with Bannerboard mod enabled.'}
                     </p>
                   </div>
