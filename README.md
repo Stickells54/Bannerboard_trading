@@ -26,22 +26,28 @@ Manage your immediate entourage and family affairs.
     -   **Finances**: Daily income vs. expenses breakdown.
     -   **Workshops**: Status, location, and profitability of your workshops.
     -   **Fiefs**: Management stats for your towns and castles (Prosperity, Loyalty, Garrison, etc.).
+![Clan](screenshots/New-PartyClan.png)
 
 ### 2. Kingdoms
 Keep an eye on the geopolitical landscape.
 -   **Kingdom Strength**: Comparative charts showing the military strength (Troops), political power (Clans), and territory (Fiefs) of all kingdoms.
 -   **Kingdom Lords**: A searchable list of all lords in each kingdom, including their clan affiliations.
 -   **Kingdom Wars**: Current diplomatic status, showing active wars and peace treaties.
+![Kingdoms](screenshots/New-Kingdom.png)
 
 ### 3. Trading
 Maximize your profits with advanced market intelligence.
 -   **Market Table**: A searchable database of item prices and stock levels for any town you've visited (or have trade rumors for).
 -   **Trade Prices**: A global overview of trade goods, highlighting the absolute lowest buy prices and highest sell prices currently available in the world.
 -   **Trade Routes**: Automatically calculated profitable trade routes. The mod analyzes market data to suggest where to buy low and sell high for maximum profit.
+![Trading](screenshots/New-CityMarket.png)
+![Trading](screenshots/New-TradePrices.png)
+
 
 ### 4. Settlements
 Monitor the prosperity and development of the world.
 -   **Town Prosperity**: A global ranking of towns by prosperity. Use this to identify rich targets for conquest or struggling fiefs that need investment.
+![Settlements](screenshots/New-Setllements.png)
 
 ### 5. Heroes
 Track important characters across Calradia.

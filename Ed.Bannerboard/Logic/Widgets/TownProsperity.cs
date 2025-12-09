@@ -15,8 +15,6 @@ namespace Ed.Bannerboard.Logic.Widgets
     /// </summary>
     public class TownProsperity : WidgetBase
     {
-        private int _townCount = 10;
-
         /// <summary>
         /// A widget for displaying town prosperity.
         /// </summary>
@@ -40,7 +38,7 @@ namespace Ed.Bannerboard.Logic.Widgets
 
         public override void Init(WebSocketSession session)
         {
-            // Not sending anything because the client will request how many towns to show
+            SendUpdate(session);
         }
 
         public override bool CanHandleMessage(string message)
@@ -51,16 +49,7 @@ namespace Ed.Bannerboard.Logic.Widgets
 
         public override void HandleMessage(WebSocketSession session, string message)
         {
-            var model = JsonConvert.DeserializeObject<TownProsperityFilterModel>(message, new VersionConverter());
-            if (model == null)
-            {
-                return;
-            }
-
-            // Number of towns to return has changed
-            _townCount = model.TownCount;
-
-            // Send the new list
+            // Ignore filter model, just send update
             SendUpdate(session);
         }
 
@@ -73,7 +62,6 @@ namespace Ed.Bannerboard.Logic.Widgets
                     Towns = Campaign.Current.Settlements
                         .Where(s => s.IsTown)
                         .OrderByDescending(s => s.Town.Prosperity)
-                        .Take(_townCount)
                         .Select(s => new TownProsperityItem
                         {
                             Name = s.Name.ToString(),

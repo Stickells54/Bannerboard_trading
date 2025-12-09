@@ -52,20 +52,7 @@ namespace Ed.Bannerboard.Logic.Widgets
 
         public override void Init(WebSocketSession session)
         {
-            // Send the list of alive heroes for search box
-            var model = new HeroTrackerReturnDataModel
-            {
-                Heroes = Campaign.Current.AliveHeroes
-                    .Select(h => new HeroTrackerReturnDataItem
-                    {
-                        Id = h.StringId,
-                        Name = h.Name.ToString()
-                    })
-					.OrderBy(h => h.Name)
-					.ToList(),
-                Version = Version
-            };
-            session.Send(model.ToJsonArraySegment());
+            SendUpdate(session);
         }
 
         public override bool CanHandleMessage(string message)
@@ -101,12 +88,12 @@ namespace Ed.Bannerboard.Logic.Widgets
 
                 // Start tracking new locations
                 // Previously alive, but now dead heroes will still be tracked
-                var trackableHeroes = Campaign.Current.AliveHeroes
+                var heroesToTrack = Campaign.Current.AliveHeroes
                     .Union(Campaign.Current.DeadOrDisabledHeroes)
-                    .Where(h => _trackedHeroes.Any(t => t.Id == h.StringId))
+                    .Where(h => _trackedHeroes.Any(t => t.Id == h.StringId && t.IsShownOnMap))
                     .ToList();
-                var newLocations = trackableHeroes
-                    .Where(h => _trackedHeroes.First(t => t.Id == h.StringId).IsShownOnMap && h.LastKnownClosestSettlement != null)
+                var newLocations = heroesToTrack
+                    .Where(h => h.LastKnownClosestSettlement != null)
                     .Select(h => h.LastKnownClosestSettlement)
                     .ToList();
                 foreach (var l in newLocations)
@@ -119,15 +106,19 @@ namespace Ed.Bannerboard.Logic.Widgets
 
                 var model = new HeroTrackerModel
                 {
-                    Heroes = trackableHeroes
-                        .Select(h => new HeroTrackerItem
-                        {
-                            Id = h.StringId,
-                            Name = h.Name.ToString(),
-                            Location = h.LastKnownClosestSettlement?.Name.ToString() ?? "-",
-                            IsDead = h.IsDead,
-                            IsDisabled = h.IsDisabled,
-                            IsShownOnMap = _trackedHeroes.First(t => t.Id == h.StringId).IsShownOnMap
+                    Heroes = Campaign.Current.AliveHeroes
+                        .Union(Campaign.Current.DeadOrDisabledHeroes)
+                        .Select(h => {
+                            var trackedItem = _trackedHeroes.FirstOrDefault(t => t.Id == h.StringId);
+                            return new HeroTrackerItem
+                            {
+                                Id = h.StringId,
+                                Name = h.Name.ToString(),
+                                Location = h.LastKnownClosestSettlement?.Name.ToString() ?? "-",
+                                IsDead = h.IsDead,
+                                IsDisabled = h.IsDisabled,
+                                IsShownOnMap = trackedItem?.IsShownOnMap ?? false
+                            };
                         })
                         .ToList(),
                     Version = Version
